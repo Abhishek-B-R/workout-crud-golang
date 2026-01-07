@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 	"flag"
-	"github.com/Abhishek-B-R/workout-crud/internal/app"
-	"github.com/Abhishek-B-R/workout-crud/internal/routes"
+	"github.com/Abhishek-B-R/workout-crud/internals/app"
+	"github.com/Abhishek-B-R/workout-crud/internals/routes"
 )
 
 func main() {
@@ -18,6 +18,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	defer app.DB.Close()
 		
 	r := routes.SetupRoutes(app)
 	server := &http.Server{

@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/Abhishek-B-R/workout-crud/internal/app"
+	"github.com/Abhishek-B-R/workout-crud/internals/app"
 	"github.com/go-chi/chi/v5"
 )
 
