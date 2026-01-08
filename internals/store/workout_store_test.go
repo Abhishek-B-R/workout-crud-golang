@@ -102,6 +102,7 @@ func TestCreateWorkout(t *testing.T){
 
 			retrieved, err := store.GetWorkoutById(int64(createdWorkout.ID))
 			require.NoError(t, err)
+			
 			assert.Equal(t, tt.workout.ID, retrieved.ID)
 			assert.Equal(t, len(tt.workout.Entries), len(retrieved.Entries))
 
