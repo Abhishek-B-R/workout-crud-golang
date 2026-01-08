@@ -25,12 +25,14 @@ func NewApplication() (*Application, error){
 	}
 
 	err = store.MigrateFS(pgDb, migrations.FS, ".")
-	if err != nil {
+	if err != nil { 
 		panic(err)
 	}
 
 	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
-	workoutHandler := api.NewWorkoutHandler()
+
+	workoutStore := store.NewPostgresWorkoutStore(pgDb)
+	workoutHandler := api.NewWorkoutHandler(workoutStore)
 	app := &Application{
 		Logger: logger, 
 		WorkoutHandler: workoutHandler,
