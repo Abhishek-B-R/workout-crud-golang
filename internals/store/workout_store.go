@@ -38,7 +38,6 @@ type WorkoutStore interface{
 	GetWorkoutById(id int64) (*Workout, error)
 	UpdateWorkout(*Workout) (error)
 	DeleteWorkout(id int64) (error)
-	GetWorkoutOwner(id int64) (int, error)
 }
 
 func (pg *PostgresWorkoutStore) CreateWorkout(workout *Workout) (*Workout, error) {
@@ -184,21 +183,4 @@ func (pg *PostgresWorkoutStore) DeleteWorkout(id int64) error {
 	}
 	
 	return nil
-}
-
-func (pg *PostgresWorkoutStore) GetWorkoutOwner(workoutID int64) (int, error) {
-	var userID int
-
-	query := `
-	SELECT user_id
-	FROM workouts
-	WHERE id = $1
-	`
-
-	err := pg.db.QueryRow(query, workoutID).Scan(&userID)
-	if err != nil {
-		return 0, err
-	}
-
-	return userID, nil
 }
