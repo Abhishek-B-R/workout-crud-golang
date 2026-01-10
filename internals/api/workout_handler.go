@@ -10,6 +10,7 @@ import (
 	"github.com/Abhishek-B-R/workout-crud/internals/middleware"
 	"github.com/Abhishek-B-R/workout-crud/internals/store"
 	"github.com/Abhishek-B-R/workout-crud/internals/utils"
+	"github.com/Abhishek-B-R/workout-crud/internals/authz"
 )
 
 type WorkoutHandler struct{
@@ -123,7 +124,7 @@ func (wh *WorkoutHandler) HandleUpdateWorkoutByID(w http.ResponseWriter, r *http
 		return
 	}
 
-	workoutOwner, err := wh.workoutStore.GetWorkoutOwner(workoutID)
+	workoutOwner, err := wh.workoutStore.GetWorkoutById(workoutID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			utils.WriteJSON(w, http.StatusNotFound, utils.Envelope{"error":"workout does not exist"})
@@ -134,7 +135,7 @@ func (wh *WorkoutHandler) HandleUpdateWorkoutByID(w http.ResponseWriter, r *http
 		return
 	}
 
-	if workoutOwner != currentUser.ID {
+	if !authz.CanUpdateWorkout(currentUser, workoutOwner) {
 		utils.WriteJSON(w, http.StatusForbidden, utils.Envelope{"error":"you are not authorized to update this workout"})
 		return
 	}
@@ -162,7 +163,7 @@ func (wh *WorkoutHandler) HandleDeleteWorkoutByID(w http.ResponseWriter, r *http
 		return
 	}
 
-	workoutOwner, err := wh.workoutStore.GetWorkoutOwner(workoutID)
+	workoutOwner, err := wh.workoutStore.GetWorkoutById(workoutID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			utils.WriteJSON(w, http.StatusNotFound, utils.Envelope{"error":"workout does not exist"})
@@ -173,7 +174,7 @@ func (wh *WorkoutHandler) HandleDeleteWorkoutByID(w http.ResponseWriter, r *http
 		return
 	}
 
-	if workoutOwner != currentUser.ID {
+	if !authz.CanDeleteWorkout(currentUser , workoutOwner) {
 		utils.WriteJSON(w, http.StatusForbidden, utils.Envelope{"error":"you are not authorized to delete this workout"})
 		return
 	}
