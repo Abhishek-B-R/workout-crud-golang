@@ -9,6 +9,8 @@ require (
 	github.com/stretchr/testify v1.11.1
 )
 
+require github.com/joho/godotenv v1.5.1 // indirect
+
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect

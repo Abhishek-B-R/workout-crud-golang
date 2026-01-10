@@ -24,3 +24,16 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
     restart: unless-stopped
+
+# # uncomment below part if you want the backend part also containerized
+#   workout-crud:
+#     build: .
+#     restart: always
+#     ports:
+#       - "8080:8080"
+#     depends_on:
+#       - db
+#       - test-db
+#     environment:
+#       - DB_HOST=db
+#       - DB_TEST_HOST=test-db

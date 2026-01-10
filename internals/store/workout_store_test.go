@@ -2,15 +2,27 @@ package store
 
 import (
 	"database/sql"
+	"os"
 	"testing"
 
 	_ "github.com/jackc/pgx/v4/stdlib"
+	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func setupTestDB(t *testing.T) *sql.DB {
-	db, err := sql.Open("pgx", "host=localhost user=postgres password=postgres dbname=postgres port=5433 sslmode=disable")
+	err := godotenv.Load()
+    if err != nil {
+        panic(`No .env file found, run "mv .env.example .env"`)
+    }
+
+    db_host := os.Getenv("DB_HOST")
+	if db_host == "" {
+		db_host = "localhost"
+	}
+
+	db, err := sql.Open("pgx", "host="+ db_host +" user=postgres password=postgres dbname=postgres port=5433 sslmode=disable")
 	if err != nil {
 		t.Fatalf("opening test db: %v", err)
 	}
